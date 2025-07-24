@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Ví Tiền Ảo</title>
+  <link rel="icon" href="{{ url_for('static', filename='Logo.ico') }}" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap');
+
+    body {
+      background: url('/static/images/Buy_Bg.png') no-repeat center fixed;
+      background-size: cover;
+      font-family: 'Orbitron', sans-serif;
+      color: #00fff7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 0;
+    }
+
+    .container {
+      z-index: 1;
+      position: relative;
+      padding: 30px;
+    }
+
+    h2 {
+      font-size: 3rem;
+      color: #00ffff;
+      text-shadow: 0 0 20px #00ffff, 0 0 60px #00ffff;
+      animation: blinkText 1.2s infinite;
+      -webkit-text-stroke: 1px #fff;
+    }
+
+    p.fs-4 {
+      font-size: 2rem;
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffff, 0 0 40px #00ffff;
+      -webkit-text-stroke: 0.5px #ffffff;
+    }
+
+    strong {
+      animation: blinkText 1.5s infinite;
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+      -webkit-text-stroke: 0.5px #ffffff;
+    }
+
+    .btn-cyber {
+      padding: 1rem 2rem;
+      background: #00ffff;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-top: 2rem;
+      box-shadow: 0 0 15px #00ffff;
+      transition: all 0.3s ease;
+    }
+
+    .btn-cyber:hover {
+      background: #00cccc;
+      box-shadow: 0 0 30px #00ffff;
+      transform: scale(1.05);
+    }
+
+    .blink-btn {
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
+    @keyframes blinkText {
+      0%, 100% {
+        opacity: 1;
+        text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+      }
+      50% {
+        opacity: 0.6;
+        text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
+      }
+    }
+
+    .separator {
+      margin: 20px auto;
+      width: 200px;
+      border-top: 2px solid #00ffff;
+      box-shadow: 0 0 10px #00ffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+
+  <div class="container">
+    <h2>👋 Xin chào, {{ user.username }}!</h2>
+    <div class="separator"></div>
+    <h2>Số dư hiện tại:</h2>
+    <p class="fs-4">Bạn đang có <strong>{{ user.wallet }}</strong> xu trong ví.</p>
+    <a href="{{ url_for('index') }}" class="btn btn-cyber blink-btn">↩ Quay về Trang Chủ</a>
+    <a href="{{ url_for('withdraw') }}" class="btn btn-cyber blink-btn">Rút tiền</a>
+    <a href="{{ url_for('topup') }}" class="btn btn-cyber blink-btn">💸 Nạp tiền</a>
+  </div>
+</body>
+</html>

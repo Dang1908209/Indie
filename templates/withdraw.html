@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Rút tiền</title>
+  <link rel="icon" href="{{ url_for('static', filename='Logo.ico') }}" type="image/x-icon">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<style>
+  body {
+    background-color: #1a1a1a;
+    color: white;
+    margin: 0;
+    padding: 0;
+    background-image: url('{{ url_for('static', filename='source.gif') }}');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+  }
+
+  .container {
+    background-color: rgba(0, 0.5, 0, 0.8); /* Làm nền trong suốt cho dễ đọc */
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    margin-top: 60px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2 class="text-center">🏦 Rút tiền</h2>
+
+    {% if error %}
+      <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    {% if success %}
+      <div class="alert alert-success">{{ success }}</div>
+    {% endif %}
+
+    <form method="post">
+      <label for="amount">Số tiền cần rút (đồng):</label>
+      <input type="number" class="form-control" name="amount" min="1000" required>
+
+      <label for="bank_name">Ngân hàng:</label>
+      <input type="text" class="form-control" name="bank_name" value="{{ bank_name }}" required>
+
+      <label for="account_number">Số tài khoản:</label>
+      <input type="text" class="form-control" name="account_number" value="{{ account_number }}" required>
+
+      <label for="account_holder">Chủ tài khoản:</label>
+      <input type="text" class="form-control" name="account_holder" value="{{ account_holder }}" required>
+
+      <button type="submit" class="btn btn-warning mt-3 w-100">Xác nhận rút</button>
+    </form>
+
+    <a href="/wallet" class="btn btn-outline-light mt-3 w-100">⬅ Quay lại ví</a>
+  </div>
+</body>
+</html>

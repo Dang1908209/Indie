@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Indie - Game Gallery</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='Logo.ico') }}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+<style>
+      .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+  /* Glitch logo intro */
+  #intro-logo {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background:  linear-gradient(135deg, #0f0c29, #000, #24243e);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeOut 1s ease-out 2.5s forwards;
+  }
+
+  #intro-logo img {
+    width: 200px;
+    position: relative;
+    filter: drop-shadow(0 0 10px #0ff);
+    animation: glitch 2s infinite;
+  }
+
+  #intro-logo img {
+  animation: glitch 2s infinite, glowFade 2s ease-in-out 1 forwards;
+}
+
+@keyframes glowFade {
+  from {
+    opacity: 0;
+    filter: drop-shadow(0 0 30px #0ff);
+  }
+  to {
+    opacity: 1;
+    filter: drop-shadow(0 0 15px #0ff);
+  }
+}
+
+  @keyframes glitch {
+    0% {
+      transform: translate(0);
+      filter: hue-rotate(0deg);
+    }
+    20% {
+      transform: translate(-2px, 1px);
+      filter: hue-rotate(30deg);
+    }
+    40% {
+      transform: translate(2px, -1px);
+      filter: hue-rotate(-30deg);
+    }
+    60% {
+      transform: translate(-1px, 2px);
+      filter: hue-rotate(60deg);
+    }
+    80% {
+      transform: translate(1px, -2px);
+      filter: hue-rotate(-60deg);
+    }
+    100% {
+      transform: translate(0);
+      filter: hue-rotate(0deg);
+    }
+  }
+
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  .main-content {
+    opacity: 0;
+    transition: opacity 1s ease-in;
+  }
+
+  .main-content.visible {
+    opacity: 1;
+  }
+
+
+</style>
+
+    <style>
+body {
+    background: url('/static/images/Background_Index.png') no-repeat center fixed;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    min-height: 100vh;         /* ✅ đảm bảo ít nhất cao bằng màn hình */
+    background-attachment: fixed;  /* ✅ giúp gradient không bị cuộn rời */
+    background-repeat: no-repeat;
+    background-size: cover;    /* ✅ phủ toàn bộ dù nội dung dài */
+}
+
+        h1 {
+            color: #ff00cc;
+            text-shadow: 0 0 5px #ff00cc, 0 0 10px #ff00cc;
+        }
+
+        .card {
+            background: #1a1a2e;
+            border: none;
+            border-radius: 12px;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 20px rgba(255, 0, 204, 0.4);
+        }
+
+        .card-title {
+            color: #00fff7;
+            text-shadow: 0 0 5px #00fff7;
+        }
+
+        .btn-primary, .btn-success {
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(45deg, #ff00cc, #3333ff);
+            color: white;
+            box-shadow: 0 0 10px #ff00cc;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-primary:hover, .btn-success:hover {
+            box-shadow: 0 0 20px #00fff7;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #00fff7, #ff00cc);
+            box-shadow: 0 0 10px #00fff7;
+        }
+
+        .btn-outline-light {
+            border: 2px solid #ff00cc;
+            color: #ff00cc;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-outline-light:hover {
+            background-color: #ff00cc;
+            color: #000;
+        }
+
+        .card-img-top {
+            object-fit: cover;
+            height: 250px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .card-footer {
+            background: transparent;
+        }
+
+        .auth-bar {
+            display: flex;
+            justify-content: end;
+            align-items: center;
+            padding-top: 1.5rem;
+        }
+
+        .auth-bar span {
+            font-weight: bold;
+            color: #00fff7;
+            text-shadow: 0 0 5px #00fff7;
+            margin-right: 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="overlay"></div>
+<!-- Glitch Logo Intro -->
+<div id="intro-logo">
+  <img src="{{ url_for('static', filename='images/Icon.png') }}" alt="Logo Glitch">
+</div>
+
+<style>
+  .slogan-blink {
+    font-size: 3rem;
+    color: #adff2f;
+    text-shadow: 0 0 5px #00fff7, 0 0 10px #ff00cc;
+    border: 2px solid #adff2f;
+    border-radius: 12px;
+    display: inline-block;
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 10px #00fff7, 0 0 20px #ff00cc;
+    padding: 12px 24px;
+    animation: blinkGlow 2s infinite;
+  }
+
+  @keyframes blinkGlow {
+    0%, 100% {
+      opacity: 1;
+      box-shadow: 0 0 10px #00fff7, 0 0 20px #ff00cc;
+    }
+    50% {
+      opacity: 0.4;
+      box-shadow: 0 0 2px #00fff7, 0 0 5px #ff00cc;
+    }
+  }
+</style>
+
+<div style="text-align: center; margin-top: 1rem;">
+  <div class="slogan-blink">
+    INDIE - TẢI LÊN CHỐNG LẠI LỐI MÒN.
+  </div>
+</div>
+
+    <!-- Auth Bar -->
+    <div class="container auth-bar">
+        {% if current_user and current_user.is_admin %}
+            <a href="{{ url_for('view_topups') }}" class="btn btn-outline-light me-2">🛠 Admin Panel</a>
+            <a href="{{ url_for('view_withdrawals') }}" class="btn btn-outline-light me-2">🛠 Admin Withdraw</a>
+            <a href="{{ url_for('admin_users',user_id=current_user.id) }}" class="btn btn-outline-danger me-2">🗑 Xoá tài khoản</a>
+        {% endif %}
+
+        {% if 'user_id' not in session %}
+            <a href="{{ url_for('login') }}" class="btn btn-outline-light me-2">🔐 Đăng nhập</a>
+            <a href="{{ url_for('register') }}" class="btn btn-outline-light">🆕 Đăng ký</a>
+        {% else %}
+            {% if username %}
+                <span>👤 Xin chào, {{ username }}!</span>
+                <a href="{{ url_for('wallet') }}" class="btn btn-outline-light text-decoration-none">
+                💳 Số dư: {{ "%.2f"|format(wallet) }} VNĐ
+                </a>
+                <a href="{{ url_for('stats', username=username) }}" class="btn btn-outline-light ms-2 text-decoration-none">
+                📊 Thống kê
+                </a>
+            {% endif %}
+            <a href="{{ url_for('logout') }}" class="btn btn-outline-warning">🚪 Đăng xuất</a>
+        {% endif %}
+    </div>
+
+    <div id="mainContent" class="main-content container py-5">
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+      {% for message in messages %}
+        {{ message }}
+      {% endfor %}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endif %}
+{% endwith %}
+    <h1 class="mb-4 text-center">🎮 Game Upload Portal</h1>
+
+    <div class="row">
+        <!-- Sidebar -->
+<div class="col-md-3 mb-4">
+    <div class="p-3 rounded" style="background-color: rgba(255, 255, 255, 0.05); box-shadow: 0 0 10px rgba(255, 0, 204, 0.3);">
+        <h5 style="color: #ff00cc;">🔍 Tìm kiếm & Lọc giá</h5>
+<!-- 🔍 Form Tìm kiếm & Lọc -->
+<form method="get" action="{{ url_for('index') }}">
+    <div class="mb-3">
+        <input type="text" name="search" class="form-control" placeholder="🔎 Tên game..." value="{{ request.args.get('search', '') }}">
+    </div>
+
+    <div class="mb-3">
+        <label for="price_range" class="form-label text-light">💰 Tầm giá</label>
+        <select class="form-select" name="price_range" id="price_range">
+            <option value="">Tất cả</option>
+            <option value="free" {% if request.args.get('price_range') == 'free' %}selected{% endif %}>Miễn phí</option>
+            <option value="lt20" {% if request.args.get('price_range') == 'lt20' %}selected{% endif %}>< 20.000đ</option>
+            <option value="20to50" {% if request.args.get('price_range') == '20to50' %}selected{% endif %}>20.000đ - 50.000đ</option>
+            <option value="gt50" {% if request.args.get('price_range') == 'gt50' %}selected{% endif %}>> 50.000đ</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-outline-light w-100">🔎 Lọc</button>
+</form>
+
+<hr class="my-4" style="border-top: 1px solid #ff00cc;">
+
+<!-- 🎫 Form Voucher -->
+<form method="POST" action="{{ url_for('redeem_voucher') }}">
+    <div class="mb-3">
+        <label class="form-label text-light">🎁 Mã voucher</label>
+        <input type="text" name="voucher_code" class="form-control" placeholder="Nhập mã voucher..." required>
+    </div>
+    <button type="submit" class="btn btn-outline-light w-100">💡 Dùng mã</button>
+</form>
+
+    </div>
+</div>
+
+        <!-- Gallery -->
+        <div class="col-md-9">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for game in games %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        {% if game.image_filename %}
+                            <img src="{{ url_for('static', filename='images/' + game.image_filename) }}" class="card-img-top" alt="Game Image">
+                        {% else %}
+                            <img src="https://via.placeholder.com/400x200.png?text=No+Image" class="card-img-top" alt="No Image">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ game.name }}</h5>
+                             <p class="text-warning">💰 Giá: {{ "{:,.0f}".format(game.price) }} VNĐ</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0">
+                            <a href="{{ url_for('download', filename=game.filename) }}" class="btn btn-primary w-100">🚀 Tải game</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <a href="{{ url_for('upload') }}" class="btn btn-success">📤 Upload game mới</a>
+        <img src="{{ url_for('static', filename='images/Logo.png') }}" alt="Banner" width="225" height="200"/>
+    </div>
+</div>
+<script>
+
+  // Kích hoạt hiệu ứng hiển thị nội dung
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      mainContent.classList.add('visible');
+    }, 2500);
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

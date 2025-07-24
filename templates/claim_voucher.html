@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Nhập Mã Ưu Đãi</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  {% include 'navbar.html' %}
+  <div class="container mt-5">
+    <h2>Nhập Mã Ưu Đãi</h2>
+    <form method="POST" action="/apply_voucher">
+      <div class="mb-3">
+        <label for="voucher_code" class="form-label">Mã voucher</label>
+        <input type="text" class="form-control" id="voucher_code" name="voucher_code" required>
+      </div>
+      <button type="submit" class="btn btn-success">Áp dụng</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanh toán - {{ game.name }}</title>
+    <link rel="icon" href="{{ url_for('static', filename='Logo.ico') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Mua game: {{ game.name }}</h1>
+        <img src="{{ url_for('static', filename='images/' + game.image_filename) }}" width="300">
+
+        <h3>💳 Chuyển khoản qua ngân hàng</h3>
+        <p><strong>Ngân hàng:</strong> MB Bank</p>
+        <p><strong>Tên người nhận:</strong> Trần Văn A</p>
+        <p><strong>Số tài khoản:</strong> 0123456789</p>
+        <p><strong>Số tiền:</strong> {{ game.price }} VNĐ</p>
+        <p><strong>Nội dung chuyển khoản:</strong> MUA{{ game.id }}_USER{{ user.id }}</p>
+
+        <form action="{{ url_for('confirm_payment', game_id=game.id) }}" method="POST" enctype="multipart/form-data">
+            <label>Ảnh chụp màn hình đã chuyển khoản (tuỳ chọn):</label><br>
+            <input type="file" name="proof"><br><br>
+            <button type="submit">Tôi đã chuyển khoản</button>
+        </form>
+
+        <a href="{{ url_for('game', game_id=game.id) }}">← Quay lại game</a>
+    </div>
+</body>
+</html>

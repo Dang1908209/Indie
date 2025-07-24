@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Xác minh Email - Indie</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <link rel="icon" href="{{ url_for('static', filename='Logo.ico') }}" type="image/x-icon">
+  <style>
+    body {
+      background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+      font-family: 'Orbitron', sans-serif;
+      color: #00ffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    form {
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #00ffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    input[type="text"] {
+      padding: 0.5rem;
+      border: none;
+      border-radius: 5px;
+      margin: 1rem 0;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    button {
+      padding: 0.7rem 2rem;
+      background: #00ffff;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #00cccc;
+    }
+
+    .error {
+      color: red;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Xác minh Email</h1>
+  <form method="POST">
+    <label for="otp">Nhập mã OTP bạn nhận được trong email:</label>
+    <input type="text" id="otp" name="otp" required>
+    <button type="submit">Xác minh</button>
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+  </form>
+</body>
+</html>

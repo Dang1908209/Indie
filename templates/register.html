@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indie Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+   <link rel="icon" href="{{ url_for('static', filename='Logo.ico') }}" type="image/x-icon">
+  <style>
+    body {
+      background:  linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      color: #00ffff;
+      font-family: 'Orbitron', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #111;
+      border: 2px solid #00ffff;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 0 15px #00ffff;
+      width: 300px;
+    }
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      border: 1px solid #00ffff;
+      background: black;
+      color: #00ffff;
+    }
+    button {
+      width: 100%;
+      padding: 0.5rem;
+      background: #00ffff;
+      color: black;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    a {
+      color: #00ffff;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Register⚙</h2>
+    <form action="/register" method="POST">
+      <input type="text" name="username" placeholder="Username" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <input type="password" name="confirm" placeholder="Confirm Password" required>
+      <button type="submit">Sign Up</button>
+    </form>
+    <a href="/login">Already have an account? Login🤗</a>
+    <img src="{{ url_for('static', filename='images/Logo.png') }}" alt="Banner" width="225" height="200"/>
+  </div>
+
+</body>
+</html>

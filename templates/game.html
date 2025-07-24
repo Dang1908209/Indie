@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ game.title }} - Payment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='Logo.ico') }}" type="image/x-icon">
+    <style>
+.alert {
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    box-shadow: 0 0 10px #ff00c8;
+    text-align: center;
+}
+.alert-success {
+    background-color: #00ffcc;
+    color: #000;
+}
+.alert-danger, .alert-warning {
+    background-color: #ff4d4d;
+    color: #fff;
+}
+</style>
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Orbitron', sans-serif;
+            background: url('/static/images/Buy_Bg.png') no-repeat center fixed;
+            background-size: cover;
+            color: #00fff7;
+        }
+        .container-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 100px auto;
+    gap: 30px;
+    position: relative;
+    z-index: 1;
+}
+
+.main-content {
+    flex: 2;
+}
+
+.game-preview {
+    flex: 1;
+    text-align: center;
+    border: 2px solid #00fff7;
+    border-radius: 15px;
+    padding: 20px;
+    background-color: #121212cc;
+    box-shadow: 0 0 20px #00fff7;
+}
+
+.game-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #ff00c8;
+}
+
+.preview-title {
+    margin-top: 15px;
+    color: #00fff7;
+    font-size: 22px;
+    text-shadow: 0 0 10px #00fff7;
+}
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 100px auto;
+            padding: 30px;
+            border: 2px solid #00fff7;
+            box-shadow: 0 0 30px #00fff7;
+            border-radius: 15px;
+            background-color: #121212cc; /* có độ trong mờ */
+        }
+
+        h1 {
+            color: #ff00c8;
+            text-shadow: 0 0 10px #ff00c8;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        strong {
+            color: #ffcc00;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            font-size: 16px;
+            color: #000;
+            background: linear-gradient(45deg, #00fff7, #ff00c8);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 0 15px #00fff7;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px #ff00c8;
+        }
+
+        a {
+            color: #00fff7;
+            text-decoration: none;
+            display: block;
+            margin-top: 30px;
+        }
+
+        a:hover {
+            color: #ffcc00;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+
+<div class="container-flex">
+    <div class="container main-content">
+    	    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div id="flash-message">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            <script>
+                setTimeout(() => {
+                    const flash = document.getElementById('flash-message');
+                    if (flash) flash.style.display = 'none';
+                }, 2000); // 2 giây
+            </script>
+        {% endif %}
+    {% endwith %}
+        <h1>{{ game.title }}</h1>
+        <p>{{ game.description }}</p>
+        <p>Giá: <strong>{{ game.price }} VNĐ</strong></p>
+
+        {% if has_purchased %}
+            <p><strong>Bạn đã mua game này.</strong></p>
+            <a href="{{ url_for('download_game', game_id=game.id) }}" class="btn">Tải về</a>
+        {% else %}
+            <form action="{{ url_for('buy_game', game_id=game.id) }}" method="post">
+                <button type="submit" class="btn">Mua ngay</button>
+            </form>
+        {% endif %}
+
+        <a href="{{ url_for('index') }}">← Quay lại trang chủ</a>
+    </div>
+
+    <div class="game-preview">
+        <img src="{{ url_for('static', filename='images/' + game.image_filename) }}" alt="Ảnh game" class="game-img">
+        <h2 class="preview-title">{{ game.title }}</h2>
+    </div>
+</div>
+
+</body>
+</html>

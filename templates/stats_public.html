@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="{{ url_for('static', filename='Logo.ico') }}" type="image/x-icon">
+  <title>Thống kê doanh thu</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto+Mono:wght@500&display=swap');
+
+    body {
+      background: #0f0c29;
+      background: url('/static/images/Buy_Bg.png') no-repeat center fixed;
+      font-family: 'Orbitron', sans-serif;
+      color: #0ff;
+      padding: 40px;
+      position: relative;
+    }
+
+    /* Overlay luôn hiển thị để làm mờ nền, không đè nội dung */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    h1 {
+      text-align: center;
+      color: #0ff;
+      text-shadow: 0 0 10px #0ff;
+      margin-bottom: 50px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .chart {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      gap: 20px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bar-container {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .bar {
+      width: 80px;
+      height: 50px;
+      background: linear-gradient(180deg, #00ffff, #0077ff);
+      box-shadow: 0 0 10px #0ff, 0 0 30px #0ff;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      transition: all 0.4s ease;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .bar:hover {
+      height: 200px;
+      background: linear-gradient(180deg, #9B2A41, #C7C357, #51FF00);
+    }
+
+    .tooltip {
+      font-family: 'Roboto Mono', monospace;
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 255, 255, 0.95);
+      color: #000;
+      padding: 12px;
+      border-radius: 8px;
+      white-space: nowrap;
+      font-size: 13px;
+      box-shadow: 0 0 10px #0ff;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .bar:hover .tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-10px);
+    }
+
+    .bar-label {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin: 40px auto 20px;
+      padding: 3em 5em;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
+      background-color: #0ff;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #0ff;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+      z-index: 1;
+      position: relative;
+    }
+
+    .back-button:hover {
+      background-color: #00cccc;
+    }
+
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 40px;
+      color: #aaa;
+      font-style: italic;
+      z-index: 1;
+      position: relative;
+    }
+
+    .footer strong {
+      color: #0ff;
+    }
+  </style>
+</head>
+<body>
+  <!-- Lớp tối nền -->
+  <div class="overlay"></div>
+
+  <!-- Tiêu đề -->
+  <h1>📊 Thống kê doanh thu</h1>
+
+  <!-- Biểu đồ -->
+  <div class="chart">
+    {% for stat in stats %}
+      <div class="bar-container">
+        <div class="bar">
+          <div class="tooltip">
+            💰 Thu: {{ stat.income }}đ<br>
+            🛒 Đã bán: {{ stat.sold }}<br>
+            👤 Nhận được: {{ stat.to_owner|round }}đ<br>
+            🧑‍💼 Phí đã trả: {{ stat.to_admin|round }}đ
+          </div>
+        </div>
+        <div class="bar-label">{{ stat.title }}</div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Nút quay lại -->
+<div style="text-align: center;">
+  <a href="{{ url_for('index') }}" class="back-button">⬅ Quay về</a>
+</div>
+
+  <!-- Tên dev -->
+  <div class="footer">
+   <strong>Dev: {{username}}</strong> 💻
+  </div>
+</body>
+</html>

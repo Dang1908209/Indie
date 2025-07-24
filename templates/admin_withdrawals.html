@@ -1,0 +1,64 @@
+<!-- templates/admin_withdrawals.html -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <link rel="icon" href="{{ url_for('static', filename='Logo.ico') }}" type="image/x-icon">
+  <meta charset="UTF-8">
+  <title>Quản lý rút tiền</title>
+</head>
+<body>
+  <h2>Yêu cầu rút tiền đang chờ xử lý</h2>
+
+  {% if requests %}
+    <table border="1" cellpadding="8">
+<thead>
+  <tr>
+    <th>ID</th>
+    <th>Người dùng</th>
+    <th>Số tiền</th>
+    <th>Ngân hàng</th>  <!-- Mới -->
+    <th>Số tài khoản</th> <!-- Mới -->
+    <th>Chủ tài khoản</th> <!-- Mới -->
+    <th>Trạng thái</th>
+    <th>Thời gian tạo</th>
+    <th>Thao tác</th>
+  </tr>
+</thead>
+<tbody>
+  {% for req in requests %}
+    <tr>
+      <td>{{ req.id }}</td>
+      <td>{{ req.user.username }}</td>
+      <td>{{ req.amount }} VNĐ</td>
+      <td>{{ req.bank_name }}</td> <!-- Mới -->
+      <td>{{ req.account_number }}</td> <!-- Mới -->
+      <td>{{ req.account_holder }}</td> <!-- Mới -->
+      <td>{{ req.status }}</td>
+      <td>{{ req.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+      <td>
+        {% if req.status == 'pending' %}
+          <a href="{{ url_for('confirm_withdrawal', req_id=req.id) }}">✅ Duyệt</a>
+        {% else %}
+          Đã xử lý
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+</tbody>
+
+    </table>
+  {% else %}
+    <p>Không có yêu cầu rút tiền nào.</p>
+  {% endif %}
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul>
+        {% for category, message in messages %}
+          <li style="color: {{ 'green' if category == 'success' else 'red' }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+</body>
+</html>

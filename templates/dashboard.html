@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="{{ url_for('static', filename='Logo.ico') }}" type="image/x-icon">
+  <title>Dashboard - Indie</title>
+  <style>
+    body {
+      background: radial-gradient(circle at center, #1a1a2e, #16213e, #0f3460);
+      color: #00ffff;
+      font-family: 'Orbitron', sans-serif;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    .logout {
+      float: right;
+      background: #00ffff;
+      color: black;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+
+    .gallery-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      border: 2px solid #00ffff;
+      color: #00ffff;
+      background-color: transparent;
+      font-size: 1rem;
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff inset;
+    }
+
+    .gallery-btn:hover {
+      background-color: #00ffff;
+      color: #000;
+      box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+    }
+  </style>
+</head>
+<body>
+  <a href="/logout" class="logout">Đăng xuất</a>
+  <h1>Chào mừng đến với hệ thống!</h1>
+  <p>Bạn đã đăng nhập thành công.</p>
+
+  <a href="/" class="gallery-btn">← Quay về Gallery</a>
+</body>
+</html>

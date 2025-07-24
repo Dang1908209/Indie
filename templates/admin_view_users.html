@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-black text-white">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="{{ url_for('static', filename='Logo.ico') }}" type="image/x-icon">
+
+  <title>Admin Panel - Xóa tài khoản</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start p-8">
+
+  <h1 class="text-3xl font-bold text-cyan-400 mb-6">👁️‍🗨️ Admin Panel - Quản lý tài khoản</h1>
+
+  <div class="w-full max-w-5xl bg-gray-900 rounded-xl shadow-lg p-6">
+    <table class="w-full table-auto border-separate border-spacing-y-2">
+      <thead>
+        <tr class="text-purple-400 text-left text-sm uppercase">
+          <th>ID</th>
+          <th>Email</th>
+          <th>Số dư (Wallet)</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr class="bg-gray-800 hover:bg-gray-700 transition duration-200 rounded-lg">
+          <td class="p-3 text-cyan-300">{{ user.id }}</td>
+          <td class="p-3">{{ user.email }}</td>
+          <td class="p-3 text-green-400">{{ user.wallet }} VNĐ</td>
+          <td class="p-3">
+            {% if user.id != session['user_id'] %}
+            <form action="{{ url_for('admin_delete_user', user_id=user.id) }}" method="POST" onsubmit="return confirm('Xác nhận xóa user ID {{ user.id }}?');">
+              <button type="submit" class="bg-red-600 hover:bg-red-800 text-white px-4 py-1 rounded-lg font-semibold">
+                XÓA
+              </button>
+            </form>
+            {% else %}
+            <span class="text-yellow-400 italic">Bạn</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

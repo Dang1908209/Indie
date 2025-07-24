@@ -1,0 +1,87 @@
+<!-- templates/topup.html -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Nạp tiền</title>
+  <link rel="icon" href="{{ url_for('static', filename='Logo.ico') }}" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  <style>
+body {
+  background-image: url("{{ url_for('static', filename='images/Nap_Background.png') }}");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #0f0f0f; /* fallback màu nền nếu ảnh lỗi */
+  color: #00ffcc;
+  font-family: 'Orbitron', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+    form {
+      background-color: #1a1a1a;
+      padding: 30px;
+      border: 2px solid #00ffcc;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #00ffcc;
+      margin-bottom: 20px;
+      width: 300px;
+    }
+    input[type="number"] {
+      background-color: black;
+      color: #00ffcc;
+      border: 1px solid #00ffcc;
+      padding: 10px;
+      font-size: 16px;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    button {
+      background-color: #00ffcc;
+      color: black;
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+    .instructions {
+      background-color: #1a1a1a;
+      padding: 20px;
+      border: 2px dashed #00ffcc;
+      border-radius: 10px;
+      width: 300px;
+      font-size: 14px;
+      line-height: 1.6;
+      box-shadow: 0 0 10px #00ffcc;
+    }
+    .instructions h3 {
+      margin-top: 0;
+      color: #00ffaa;
+      text-shadow: 0 0 5px #00ffaa;
+    }
+    .highlight {
+      color: #ffffff;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <form method="POST">
+    <h2>💸 Nạp tiền vào ví</h2>
+    <input type="number" name="amount" min="1000" placeholder="Nhập số tiền VNĐ" required>
+    <button type="submit">Gửi yêu cầu</button>
+  </form>
+
+  <div class="instructions">
+    <h3>📢 Hướng dẫn chuyển khoản</h3>
+    <p>💳 <span class="highlight">Ngân hàng:</span> MBBank</p>
+    <p>👤 <span class="highlight">Chủ tài khoản:</span> Trần Hoàng Thục Đan</p>
+    <p>🔢 <span class="highlight">Số tài khoản:</span>0865720906</p>
+    <p>📝 <span class="highlight">Nội dung chuyển khoản:</span> <code>naptien_[tên tài khoản của bạn]</code></p>
+    <p>⏳ Sau khi chuyển, admin sẽ duyệt yêu cầu trong vòng vài phút.</p>
+  </div>
+</body>
+</html>
