@@ -676,6 +676,10 @@ def inject_user():
         return dict(current_user=user)
     return dict(current_user=None)
 
+@app.route('/googlee88d196767f03d0a.html')
+def serve_google_file():
+    return send_from_directory('.', 'googlee88d196767f03d0a.html')
+
 # === Init App ===
 if __name__ == '__main__':
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
