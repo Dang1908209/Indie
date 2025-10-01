@@ -88,7 +88,7 @@ def send_email_brevo(to_email, subject, content):
     api_key = "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"
 
     payload = {
-        "sender": {"email": "trandangconcho@gmail.com"},  # đã verify trong Brevo
+        "sender": {"email": "trandangconcho@gmail.com"},
         "to": [{"email": to_email}],
         "subject": subject,
         "htmlContent": f"<p>{content}</p>",
@@ -100,8 +100,15 @@ def send_email_brevo(to_email, subject, content):
         "content-type": "application/json",
     }
 
-    response = requests.post(url, json=payload, headers=headers)
-    return response.status_code == 201
+    try:
+        response = requests.post(url, json=payload, headers=headers, timeout=10)
+        print("Brevo status:", response.status_code)
+        print("Brevo text:", response.text)
+        return response.status_code == 201
+    except Exception as e:
+        print("Lỗi gửi mail:", e)
+        return False
+
 
 
 def has_purchased(user_id, game_id):
