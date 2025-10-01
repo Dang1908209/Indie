@@ -85,7 +85,7 @@ class UserVoucher(db.Model):
 # === Helper ===
 def send_email_brevo(to_email, subject, content):
     url = "https://api.brevo.com/v3/smtp/email"
-    api_key = os.getenv("BREVO_API_KEY")
+    api_key = os.getenv("Brevo")
 
     payload = {
         "sender": {"name": "Indie Game", "email": "trandangconcho@gmail.com"},  # đổi email đã xác minh
