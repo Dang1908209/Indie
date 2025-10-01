@@ -269,6 +269,7 @@ def register():
 
         # 4. Lưu vào session để xác minh sau
         session['otp'] = otp
+        session['otp_expire'] = (datetime.utcnow() + timedelta(minutes=5)).timestamp()
         session['otp_data'] = {
             'username': username,
             'email': email,
@@ -291,7 +292,16 @@ def verify_email():
     if request.method == 'POST':
         user_otp = request.form.get('otp')
         correct_otp = session.get('otp')
+        otp_expire = session.get('otp_expire')  # ✅ lấy hạn dùng
         data = session.get('otp_data')
+
+        # ✅ check hết hạn
+        if not otp_expire or datetime.utcnow().timestamp() > otp_expire:
+            flash("Mã OTP đã hết hạn. Vui lòng đăng ký lại.", "danger")
+            session.pop('otp', None)
+            session.pop('otp_expire', None)
+            session.pop('otp_data', None)
+            return redirect(url_for('register'))
 
         if correct_otp and data and user_otp == correct_otp:
             new_user = User(
@@ -305,15 +315,15 @@ def verify_email():
 
             # Dọn session sau khi xong
             session.pop('otp', None)
+            session.pop('otp_expire', None)   # ✅ clear luôn
             session.pop('otp_data', None)
 
             flash('Xác minh thành công! Tài khoản đã được tạo.', 'success')
             return redirect(url_for('login'))
         else:
-            flash('Mã OTP không đúng hoặc đã hết hạn.', 'danger')
+            flash('Mã OTP không đúng.', 'danger')
 
     return render_template('verify_email.html')
-
 
 @app.route('/logout')
 def logout():
