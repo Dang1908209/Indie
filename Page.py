@@ -3,10 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 import os, uuid
+import requests
 import smtplib
 import random
 from email.mime.text import MIMEText
-from datetime import datetime
+from datetime import datetime,timedelta
 
 app = Flask(__name__)
 app.secret_key = 'mgmq owhb lfet lfsd'
@@ -16,22 +17,12 @@ app.config['IMAGE_FOLDER'] = 'static/images'
 
 db = SQLAlchemy(app)
 
-fake_users = {
-    "user1": {
-        "wallet": 500000,
-        "bank_name": "MB Bank",
-        "account_number": "123456789",
-        "account_holder": "Nguyễn Văn A"
-    }
-}
-
-
 # === Models ===
 class TopupRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     amount = db.Column(db.Integer, nullable=False)
-    status = db.Column(db.String(20), default='pending')  # pending, done
+    status = db.Column(db.String(20), default='pending')  # pending, approved, rejected
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     processed_at = db.Column(db.DateTime, nullable=True)
     user = db.relationship('User', backref='topups')
@@ -92,25 +83,30 @@ class UserVoucher(db.Model):
     used_at = db.Column(db.DateTime, nullable=True)
 
 # === Helper ===
-def send_verification_email(recipient_email, otp_code):
-    sender_email = 'trandangconcho@gmail.com'
-    sender_password = 'mgmq owhb lfet lfsd'
-    subject = "Xác minh đăng ký Indie Game"
-    body = f"Mã OTP của bạn là: {otp_code}\nIt'll unavailible in 5 minutes"
+def send_email_brevo(to_email, subject, content):
+    url = "https://api.brevo.com/v3/smtp/email"
+    api_key = "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"  # 🔑 đổi thành API key lấy trên Brevo
 
-    msg = MIMEText(body)
-    msg['Subject'] = subject
-    msg['From'] = sender_email
-    msg['To'] = recipient_email
+    payload = {
+        "sender": {"name": "Indie Game", "email": "trandangconcho@gmail.com"},  # đổi email đã xác minh
+        "to": [{"email": to_email}],
+        "subject": subject,
+        "htmlContent": f"<p>{content}</p>"
+    }
+
+    headers = {
+        "accept": "application/json",
+        "api-key": api_key,
+        "content-type": "application/json"
+    }
 
     try:
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(sender_email, sender_password)
-        server.sendmail(sender_email, recipient_email, msg.as_string())
-        server.quit()
+        response = requests.post(url, json=payload, headers=headers)
+        print("[Brevo] Response:", response.json())
+        return True
     except Exception as e:
-        print("Email error:", e)
+        print("[Brevo] Error:", e)
+        return False
 
 def has_purchased(user_id, game_id):
     return Purchase.query.filter_by(user_id=user_id, game_id=game_id).first() is not None
@@ -279,24 +275,11 @@ def register():
             'password': generate_password_hash(password)  # Lưu hash mật khẩu
         }
 
-        # 5. Gửi email
-        try:
-            sender_email = 'trandangconcho@gmail.com'
-            sender_password = 'mgmq owhb lfet lfsd'
-            msg = MIMEText(f'Mã OTP của bạn là: {otp}')
-            msg['Subject'] = 'Xác nhận đăng ký Indie'
-            msg['From'] = sender_email
-            msg['To'] = email
-
-            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
-                server.login(sender_email, sender_password)
-                server.send_message(msg)
-
+        # 5. Gửi email qua Brevo
+        if send_email_brevo(email, "Xác nhận đăng ký Indie", f"Mã OTP của bạn là: {otp}"):
             flash('Mã OTP đã được gửi tới email của bạn.', 'info')
             return redirect(url_for('verify_email'))
-
-        except Exception as e:
-            print("[ERROR] Gửi OTP thất bại:", e)
+        else:
             flash('Không thể gửi mã OTP. Vui lòng thử lại sau.', 'danger')
             return redirect(url_for('register'))
 
@@ -556,7 +539,7 @@ def confirm_withdrawal(req_id):
     user = User.query.get(req.user_id)
     if user.wallet >= req.amount:
         user.wallet -= req.amount
-        req.status = 'done'
+        req.status = 'approved'
         req.processed_at = datetime.utcnow()
         db.session.commit()
         flash(f"✅ Đã xử lý rút {req.amount} VNĐ cho {user.username}.")
@@ -616,7 +599,8 @@ def confirm_topup(req_id):
     req.status = 'approved'
     user = User.query.get(req.user_id)
     user.wallet += req.amount
-    db.session.delete(req)  # XÓA đơn nạp sau khi xử lý
+    req.status = 'approved'
+    req.processed_at = datetime.utcnow()
     db.session.commit()
 
     flash("Duyệt thành công!", "success")
