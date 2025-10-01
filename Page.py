@@ -83,15 +83,15 @@ class UserVoucher(db.Model):
     used_at = db.Column(db.DateTime, nullable=True)
 
 # === Helper ===
-def send_email_brevo(receiver_email, otp):
+def send_email_brevo(to_email, subject, content):
     url = "https://api.brevo.com/v3/smtp/email"
     api_key = os.getenv("Brevo")
 
     payload = {
-        "sender": {"email": "trandangconcho@gmail.com"},
-        "to": [{"email": receiver_email}],
-        "subject": "Mã OTP của bạn",
-        "htmlContent": f"<p>Mã OTP của bạn là: <b>{otp}</b></p>",
+        "sender": {"email": "trandangconcho@gmail.com"},  # nhớ verify email này trong Brevo
+        "to": [{"email": to_email}],
+        "subject": subject,
+        "htmlContent": f"<p>{content}</p>",
     }
 
     headers = {
@@ -101,8 +101,6 @@ def send_email_brevo(receiver_email, otp):
     }
 
     response = requests.post(url, json=payload, headers=headers)
-
-    # ✅ log lỗi chi tiết
     print("Brevo response:", response.status_code, response.text)
 
     return response.status_code == 201
