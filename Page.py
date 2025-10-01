@@ -83,30 +83,30 @@ class UserVoucher(db.Model):
     used_at = db.Column(db.DateTime, nullable=True)
 
 # === Helper ===
-def send_email_brevo(to_email, subject, content):
+def send_email_brevo(receiver_email, otp):
     url = "https://api.brevo.com/v3/smtp/email"
     api_key = os.getenv("Brevo")
 
     payload = {
-        "sender": {"name": "Indie Game", "email": "trandangconcho@gmail.com"},  # đổi email đã xác minh
-        "to": [{"email": to_email}],
-        "subject": subject,
-        "htmlContent": f"<p>{content}</p>"
+        "sender": {"email": "trandangconcho@gmail.com"},
+        "to": [{"email": receiver_email}],
+        "subject": "Mã OTP của bạn",
+        "htmlContent": f"<p>Mã OTP của bạn là: <b>{otp}</b></p>",
     }
 
     headers = {
         "accept": "application/json",
         "api-key": api_key,
-        "content-type": "application/json"
+        "content-type": "application/json",
     }
 
-    try:
-        response = requests.post(url, json=payload, headers=headers)
-        print("[Brevo] Response:", response.json())
-        return True
-    except Exception as e:
-        print("[Brevo] Error:", e)
-        return False
+    response = requests.post(url, json=payload, headers=headers)
+
+    # ✅ log lỗi chi tiết
+    print("Brevo response:", response.status_code, response.text)
+
+    return response.status_code == 201
+
 
 def has_purchased(user_id, game_id):
     return Purchase.query.filter_by(user_id=user_id, game_id=game_id).first() is not None
