@@ -88,7 +88,7 @@ def send_email_brevo(to_email, subject, content):
     api_key = "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"
 
     payload = {
-        "sender": {"email": "trandangconcho@gmail.com"},  # nhớ verify email này trong Brevo
+        "sender": {"email": "trandangconcho@gmail.com"},  # đã verify trong Brevo
         "to": [{"email": to_email}],
         "subject": subject,
         "htmlContent": f"<p>{content}</p>",
@@ -101,8 +101,6 @@ def send_email_brevo(to_email, subject, content):
     }
 
     response = requests.post(url, json=payload, headers=headers)
-    print("Brevo response:", response.status_code, response.text)
-
     return response.status_code == 201
 
 
