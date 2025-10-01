@@ -681,9 +681,11 @@ def serve_google_file():
     return send_from_directory('.', 'googlee88d196767f03d0a.html')
 
 # === Init App ===
-if __name__ == '__main__':
+# === Init App ===
+with app.app_context():
+    db.create_all()
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     os.makedirs(app.config['IMAGE_FOLDER'], exist_ok=True)
-    with app.app_context():
-        db.create_all()
+
+if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
